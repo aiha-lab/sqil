@@ -1,0 +1,96 @@
+
+body {
+  font-family: 'Helvetica Neue', sans-serif;
+  background-color: #fefefe;
+  color: #222;
+  margin: 0;
+  padding: 0;
+}
+
+.header {
+  background-color: #222;
+  color: white;
+  text-align: center;
+  padding: 2em;
+}
+
+.header h1 {
+  font-size: 3em;
+  margin: 0;
+}
+.header h2 {
+  font-size: 2.5em;
+  margin: 0;
+}
+.header h3 {
+  margin-top: 0.3em;
+  font-weight: 300;
+}
+
+.links a {
+  color: #66ccff;
+  margin: 0 1em;
+  text-decoration: none;
+}
+.links a:hover {
+  text-decoration: underline;
+}
+
+.teaser img {
+  max-width: 900px;
+  display: block;
+  margin: 2em auto;
+}
+
+.content {
+  max-width: 900px;
+  margin: auto;
+  padding: 2em;
+  line-height: 1.6;
+}
+
+ul {
+  padding-left: 2em;
+}
+
+pre {
+  background-color: #f4f4f4;
+  padding: 1em;
+  overflow-x: auto;
+  border-radius: 6px;
+}
+
+footer {
+  text-align: center;
+  font-size: 0.9em;
+  color: #888;
+  margin: 3em 0 1em;
+}
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5em;
+  margin-top: 0.5em;
+}
+
+.item {
+  text-align: center;
+}
+
+.caption {
+  margin-top: 0.5em;
+  padding: 0.4em;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.caption.success {
+  background-color: #fef2e0;
+  color: green;
+}
+
+.caption.fail {
+  background-color: #fdeaea;
+  color: red;
+}
+
