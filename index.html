@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>SQIL: Saliency-aware Quantized Imitation Learning</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1em;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .item {
+      text-align: center;
+    }
+    .item video {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      border-radius: 6px;
+    } 
+    .item h3 {
+      margin-top: 0.3em;
+      margin-bottom: 0.3em;
+    }
+    .caption {
+      margin-top: 0.5em;
+      padding: 0.4em;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+    .caption.success {
+      background-color: #fef2e0;
+      color: green;
+    }
+    .caption.fail {
+      background-color: #fdeaea;
+      color: red;
+    }
+    .rollout-section {
+      margin-top: 3em;
+    }
+    .subtask {
+      font-size: 1.2em;
+      font-weight: 600;
+      color: #003366;
+      background-color: #e6f4ff;
+      border: 1px solid #b3d9ff;
+      padding: 1em 1.2em;
+      border-radius: 10px;
+      margin: 0em auto 1em auto;
+      text-align: center;
+      max-width: 90%;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .slider {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+    }
+    .slider-track {
+      display: flex;
+      transition: transform 0.5s ease;
+      width: 400%;
+    }
+    .slide {
+      width: 25%;
+      flex-shrink: 0;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 1em 1em;
+      background-color: #f9f9fc;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+    }
+    .slider-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 36px;
+      height: 36px;
+      background-color: rgba(255, 255, 255, 0.6);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 50%;
+      color: #333;
+      font-size: 1.8em;
+      font-weight: 750;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      cursor: pointer;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 0;
+      transition: all 0.2s ease;
+    }
+    .slider-nav:hover {
+      background-color: rgba(0, 123, 255, 0.9);
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+    .slider-nav.left { left: 10px; }
+    .slider-nav.right { right: 10px; }
+    .item-group {
+      display: flex;
+      gap: 1.5em;
+    }
+    .baseline-group {
+      position: relative;
+    }
+    .baseline-group::after {
+      content: "";
+      position: absolute;
+      top: 12%;
+      bottom: 5%;
+      right: -0.5em; 
+      border-right: 2px dashed #ccc;
+    }
+    .authors {
+      font-size: 0.95em;
+      line-height: 1.6;
+      margin-top: 0.5em;
+      margin-bottom: 1.5em;
+      text-align: center;
+    }
+    .author-names {
+      font-size: 1.2em;
+      line-height: 1.5;
+      display: inline-block;
+      margin-bottom: 0.4em;
+    } 
+    .realworld-task {
+      font-size: 1.3em;
+      font-weight: 600;
+      color: #003366;
+      margin: 0.0em 0 0.4em 0;
+      text-align: left;
+      width: 100%;
+      padding-left: 0.5em;
+    }
+    .autonomous-container {
+      background-color: #f9f9fc;
+      padding: 2em;
+      border-radius: 12px;
+      margin-top: 0em;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    }
+    .driving-row {
+      display: flex;
+      align-items: center; 
+      margin-bottom: 2em;
+      gap: 2em;
+      }
+    .driving-video {
+      flex: 6;
+    }
+    .driving-video video {
+      width: 100%;
+      border-radius: 8px;
+    }
+    .driving-caption {
+      flex: 2;
+      font-size: 1em;
+      padding: 1em 1.5em;
+      border-radius: 10px;
+      font-weight: 600;
+      background-color: #fffce6;
+      color: #155724;
+      line-height: 1.4;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+    .driving-caption.success {
+      background-color: #fffce6;
+      color: #218838;
+    }
+    .driving-caption.fail {
+      background-color: #ffe6e6;
+      color: #c00;
+    }
+    .driving-caption h4 {
+      margin-top: 0;
+      margin-bottom: 0.5em;
+      color: #000;
+    }
+    .driving-title-vertical {
+      writing-mode: vertical-rl;       /* 세로 정렬 */
+      transform: rotate(180deg);       /* 텍스트 방향 반전 */
+      font-weight: bold;
+      font-size: 1.3em;
+      margin-right: 0.5em;
+      color: #003366;
+      align-items: center;
+    }
+.teaser-summary {
+  margin-top: 1.0em;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 1.05em;
+  color: #333;
+  text-align: center;
+  line-height: 1.6;
+}
+.content h2 {
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 0.3em;
+  margin-top: 2em;
+  color: #003366;
+}
+.header h1 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 3.4em;
+  color: #00b894;
+  text-align: center;
+  margin-bottom: 0.1em;
+}
+
+.header h2 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 2.4em;
+  color: #00b894;
+  text-align: center;
+  font-weight: 400;
+  margin-top: 0;
+  margin-bottom: 0.5em;
+}
+  </style>
+</head>
+<body>
+  <header class="header">
+    <h1>SQIL:</h1>
+    <h2>Saliency-aware Quantized Imitation Learning</h2>
+<p class="authors">
+  <span class="author-names">
+    <strong>
+      Seongmin Park<sup>1</sup>, Hyungmin Kim<sup>1</sup>, Sangwoo Kim<sup>1</sup>, Wonseok Jeon<sup>2</sup>,<br>
+ Juyoung Yang<sup>2</sup>, Byeongwook Jeon<sup>2</sup>, Yoonseon Oh<sup>1</sup>, and Jungwook Choi<sup>1*</sup>
+    </strong>
+  </span><br>
+  <sup>1</sup>Hanyang University, <sup>2</sup>Hyundai Motor Company<br>
+  Seoul, Republic of Korea<br>
+  <sup>1</sup>{skstjdals, kong4274, kimzl121, yoh21}@hanyang.ac.kr<br>
+  <sup>2</sup>{wsjeon, jyjy6711, smiler}@hyundai.com, <sup>1*</sup>choij@hanyang.ac.kr
+</p>
+
+    <p class="links">
+      <a href="https://arxiv.org/abs/2505.15304">[Paper]</a>
+      <a href="https://github.com/your-org/sqil" style="pointer-events: none; color: gray;">[Code]</a>
+    </p>
+  </header>
+
+<section class="teaser" style="
+  background-color: #f9f9fc;
+  border-radius: 12px;
+  padding: 1em;
+  margin: 1em auto;
+  max-width: 900px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  text-align: center;
+">
+   <img src="assets/fig_1.PNG" alt="Teaser Image" style="width: 100%; max-width: 800px; display: block; margin: 1.0em auto;">
+  <p class="teaser-summary"style="width: 100%; margin: 0.0em auto;">
+    <strong>SQIL</strong> is the first systematic study of <strong>Quantized Imitation Learning</strong>, revealing that most quantized failures occur at <strong><em>mission-critical states</em></strong> requiring fine-grained control. 
+    By leveraging <strong>policy-driven saliency (SIS)</strong> and a <strong>SIS-weighted 4-bit QAT</strong> scheme, SQIL achieves <strong>2&ndash;4&times;</strong> efficiency gains while preserving <strong>full-precision-level success rates</strong> across real-world robotics, simulation, and autonomous driving.
+  </p>
+  </section>
+
+  <section class="content">
+    <h2>Abstract</h2>
+    <p>Deep neural network (DNN)-based policy models, such as vision-language-action (VLA) models, excel at automating complex decision-making from multi-modal inputs. However, scaling these models greatly increases computational overhead, complicating deployment in resource-constrained settings like robot manipulation and autonomous driving. To address this, we propose Saliency-Aware Quantized Imitation Learning (SQIL), which combines quantization-aware training with a selective loss-weighting strategy for mission-critical states. By identifying these states via saliency scores and emphasizing them in the training loss, SQIL preserves decision fidelity under low-bit precision. We validate SQIL's generalization capability across extensive simulation benchmarks with environment variations, real-world tasks, and cross-domain tasks (self-driving, physics simulation), consistently recovering full-precision performance. Notably, a 4-bit weight-quantized VLA model for robotic manipulation achieves up to 2.5x speedup and 2.5x energy savings on an edge GPU with minimal accuracy loss. These results underline SQIL's potential for efficiently deploying large IL-based policy models on resource-limited devices.</p>
+
+<!-- Load MathJax once in <head> or before </body> -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+<h2>Key Ideas & Method</h2>
+
+<p><strong>Quantization</strong> compresses policy parameters to low-bit precision, reducing compute and memory. Given full-precision weights \( w^{\text{FP}} \), we apply symmetric uniform quantization:</p>
+
+<div style="text-align: center; margin: 1em 0;">
+$$
+w^{Q} = \text{Clip}\left( \left\lfloor \frac{w^{\text{FP}}}{\gamma} \right\rceil, -2^{b-1}, 2^{b-1}-1 \right)
+$$
+</div>
+
+<p>
+This enables a quantized policy \( \pi^Q_\theta \) that is efficient, but incur performance loss at high-sensitivity states.
+</p>
+
+<p>
+
+To detect such <em>mission-critical states</em>, SQIL computes a <strong>Saliency-based Importance Score (SIS)</strong>:
+</p>
+
+<div style="text-align: center; margin: 1em 0;">
+$$
+\text{SIS}(s_t) = \mathbb{E}_k \left[ \left\| \pi(s_t) - \pi(\phi(s_t, k)) \right\|^2 \right]
+$$
+</div>
+
+<p>
+where \( \phi(s_t, k) \) introduces a local state perturbation at location \(k\). High SIS indicates strong sensitivity in decision-making.
+<img src="assets/fig_6.PNG" alt="Teaser Image", style="width: 90%; display: block; margin: 1em auto;">
+</p>
+
+<p>
+SQIL integrates this signal into a saliency-weighted imitation objective:
+</p>
+
+<div style="text-align: center; margin: 1.2em 0;">
+$$
+\mathcal{L}^{\text{SQIL}}(\theta) = \underbrace{- \log \pi^Q_\theta(a_t|s_t)}_{\text{QAT}} + \underbrace{\alpha_t \cdot D(\pi^Q_\theta || \pi^{FP})}_{\text{QRD weighted by SIS}}
+$$
+</div>
+
+<p>
+This allows the quantized policy to focus on states where quantization has the most critical effect, achieving full-precision-like performance even at 4-bit.
+<img src="assets/fig_2.PNG" alt="Teaser Image", style="width: 70%; display: block; margin: 1em auto;">
+
+<img src="assets/fig_2_2.PNG" alt="Teaser Image", style="width: 60%; display: block; margin: 1em auto;">
+  Keyframe (KF) methods identify coarse transitions (e.g., "drawer open") using object state or vision-language cues.
+  SIS captures finer interaction moments?like grasping or releasing?by measuring control sensitivity, 
+  improving performance under quantization (+1.1% over KF).
+</p>
+
+<p>
+<h2>Experiments</h2>
+<img src="assets/fig_3.PNG" alt="Teaser Image", style="width: 80%; display: block; margin: 1em auto;">
+<img src="assets/fig_4.PNG" alt="Teaser Image", style="width: 80%; display: block; margin: 1em auto;">
+<img src="assets/fig_5.PNG" alt="Teaser Image", style="width: 90%; display: block; margin: 1em auto;">
+
+</p>
+    <section class="rollout-section">
+      <h2>Rollout Videos</h2>
+  <h3>Real-World Robot Manipulation</h3>
+  <div class="slider">
+    <button class="slider-nav left" onclick="slideReal(-1)">&#x276E;</button>
+    <button class="slider-nav right" onclick="slideReal(1)">&#x276F;</button>
+    <div class="slider-track" id="real-slider" style="width: 200%;">
+      <div class="slide" style="width: 50%;">
+        <h4 class="realworld-task">Task: stack purple cup on green cup</h4>
+        <div class="video-grid" style="grid-template-columns: repeat(3, 1fr);">
+          <div class="item baseline-group"><h3>Baseline FP</h3><video autoplay muted loop playsinline width="100%"><source src="assets/real1_fp.mp4"></video><p class="caption success">Success</p></div>
+          <div class="item"><h3>PTQ W4</h3><video autoplay muted loop playsinline width="100%"><source src="assets/real1_ptq.mp4"></video><p class="caption fail">Failed to pick up the purple cup</p></div>
+          <div class="item"><h3>SQIL W4 (Ours)</h3><video autoplay muted loop playsinline width="100%"><source src="assets/real1_sqil.mp4"></video><p class="caption success">Success</p></div>
+        </div>
+      </div>
+      <div class="slide" style="width: 50%;">
+        <h4 class="realworld-task">Task: put eggplant into pot</h4>
+        <div class="video-grid" style="grid-template-columns: repeat(3, 1fr);">
+          <div class="item baseline-group"><h3>Baseline FP</h3><video autoplay muted loop playsinline width="100%"><source src="assets/real2_fp.mp4"></video><p class="caption success">Success</p></div>
+          <div class="item"><h3>PTQ W4</h3><video autoplay muted loop playsinline width="100%"><source src="assets/real2_ptq.mp4"></video><p class="caption fail">Failed to pick up the eggplant</p></div>
+          <div class="item"><h3>SQIL W4 (Ours)</h3><video autoplay muted loop playsinline width="100%"><source src="assets/real2_sqil.mp4"></video><p class="caption success">Success</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+      <h3>Quantized OpenVLA on LIBERO Benchmark</h3>
+      <div class="slider">
+        <button class="slider-nav left" onclick="slideLibero(-1)">&#x276E;</button>
+        <button class="slider-nav right" onclick="slideLibero(1)">&#x276F;</button>
+        <div class="slider-track" id="libero-slider">
+          <div class="slide">
+            <div class="subtask"><strong>LIBERO-Spatial</strong>: pick up the black bowl on the stove and place it on the plate</div>
+            <div class="video-grid item-group">
+              <div class="item baseline-group"><h3>Baseline FP</h3><video autoplay muted loop playsinline width="100%"><source src="assets/spatial_fp.mp4"></video><p class="caption success">Success</p></div>
+              <div class="item"><h3>PTQ W4</h3><video autoplay muted loop playsinline width="100%"><source src="assets/spatial_ptq.mp4"></video><p class="caption fail">Failure</p></div>
+              <div class="item"><h3>QAT W4</h3><video autoplay muted loop playsinline width="100%"><source src="assets/spatial_qat.mp4"></video><p class="caption fail">Failure</p></div>
+              <div class="item"><h3>SQIL W4 (Ours)</h3><video autoplay muted loop playsinline width="100%"><source src="assets/spatial_sqil.mp4"></video><p class="caption success">Success</p></div>
+            </div>
+          </div>
+          <div class="slide">
+            <div class="subtask"><strong>LIBERO-Object</strong>: pick up the cream cheese and place it in the basket</div>
+            <div class="video-grid item-group">
+              <div class="item baseline-group"><h3>Baseline FP</h3><video autoplay muted loop playsinline width="100%"><source src="assets/object_fp.mp4"></video><p class="caption success">Success</p></div>
+              <div class="item"><h3>PTQ W4</h3><video autoplay muted loop playsinline width="100%"><source src="assets/object_ptq.mp4"></video><p class="caption fail">Failure</p></div>
+              <div class="item"><h3>QAT W4</h3><video autoplay muted loop playsinline width="100%"><source src="assets/object_qat.mp4"></video><p class="caption fail">Failure</p></div>
+              <div class="item"><h3>SQIL W4 (Ours)</h3><video autoplay muted loop playsinline width="100%"><source src="assets/object_sqil.mp4"></video><p class="caption success">Success</p></div>
+            </div>
+          </div>
+          <div class="slide">
+            <div class="subtask"><strong>LIBERO-Goal</strong>: push the plate to the front of the stove</div>
+            <div class="video-grid item-group">
+              <div class="item baseline-group"><h3>Baseline FP</h3><video autoplay muted loop playsinline width="100%"><source src="assets/goal_fp.mp4"></video><p class="caption success">Success</p></div>
+              <div class="item"><h3>PTQ W4</h3><video autoplay muted loop playsinline width="100%"><source src="assets/goal_ptq.mp4"></video><p class="caption fail">Failure</p></div>
+              <div class="item"><h3>QAT W4</h3><video autoplay muted loop playsinline width="100%"><source src="assets/goal_qat.mp4"></video><p class="caption fail">Failure</p></div>
+              <div class="item"><h3>SQIL W4 (Ours)</h3><video autoplay muted loop playsinline width="100%"><source src="assets/goal_sqil.mp4"></video><p class="caption success">Success</p></div>
+            </div>
+          </div>
+          <div class="slide">
+            <div class="subtask"><strong>LIBERO-Long</strong>: put the black bowl in the bottom drawer of the cabinet and close it</div>
+            <div class="video-grid item-group">
+              <div class="item baseline-group"><h3>Baseline FP</h3><video autoplay muted loop playsinline width="100%"><source src="assets/long_fp.mp4"></video><p class="caption success">Success</p></div>
+              <div class="item"><h3>PTQ W4</h3><video autoplay muted loop playsinline width="100%"><source src="assets/long_ptq.mp4"></video><p class="caption fail">Failure</p></div>
+              <div class="item"><h3>QAT W4</h3><video autoplay muted loop playsinline width="100%"><source src="assets/long_qat.mp4"></video><p class="caption fail">Failure</p></div>
+              <div class="item"><h3>SQIL W4 (Ours)</h3><video autoplay muted loop playsinline width="100%"><source src="assets/long_sqil.mp4"></video><p class="caption success">Success</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+<h3>Autonomous Driving: Quantized CILRS on NoCrash-dense Benchmark</h3>
+<div class="autonomous-container">
+  <div class="driving-row">
+    <div class="driving-title-vertical">Baseline FP</div>
+    <div class="driving-video"> 
+      <video autoplay muted loop playsinline controls>
+        <source src="assets/driving_fp.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="driving-caption success">
+      Successfully completed driving without collisions with vehicles or pedestrians
+    </div>
+  </div>
+  <div class="driving-row">
+    <div class="driving-title-vertical">QAT W4</div>
+    <div class="driving-video">
+      <video autoplay muted loop playsinline controls>
+        <source src="assets/driving_qat.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="driving-caption fail">
+      Driving failed due to a collision with a vehicle
+    </div>
+  </div>
+  <div class="driving-row">
+    <div class="driving-title-vertical">SQIL W4</div>
+    <div class="driving-video">
+           <video autoplay muted loop playsinline controls>
+        <source src="assets/driving_sqil.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="driving-caption success">
+      Successfully completed driving without collisions with vehicles or pedestrians
+    </div>
+  </div>
+</div>
+</section>
+
+    <h2>BibTeX</h2>
+    <pre>
+@article{park2025saliency,
+  title={Saliency-Aware Quantized Imitation Learning for Efficient Robotic Control},
+  author={Park, Seongmin and Kim, Hyungmin and Jeon, Wonseok and Yang, Juyoung and Jeon, Byeongwook and Oh, Yoonseon and Choi, Jungwook},
+  journal={arXiv preprint arXiv:2505.15304},
+  year={2025}
+}
+    </pre>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Seongmin Park, VLA Lab</p>
+  </footer>
+
+<script>
+  let realIndex = 0;
+  function slideReal(dir) {
+    const total = 2;
+    realIndex = (realIndex + dir + total) % total;
+    document.getElementById('real-slider').style.transform = `translateX(-${50 * realIndex}%)`;
+
+    const slides = document.querySelectorAll('#real-slider .slide');
+    const currentSlide = slides[realIndex];
+    const videos = currentSlide.querySelectorAll('video');
+
+    videos.forEach(video => {
+      video.pause();
+      video.currentTime = 0;
+      video.play();
+    });
+  }
+  let liberoIndex = 0;
+  function slideLibero(dir) {
+    const total = 4;
+    liberoIndex = (liberoIndex + dir + total) % total;
+    document.getElementById('libero-slider').style.transform = `translateX(-${25 * liberoIndex}%)`;
+
+    const slides = document.querySelectorAll('#libero-slider .slide');
+    const currentSlide = slides[liberoIndex];
+    const videos = currentSlide.querySelectorAll('video');
+
+    videos.forEach(video => {
+      video.pause();
+      video.currentTime = 0;
+      video.play();
+    });
+  }
+</script>
+</body>
+</html>
