@@ -340,6 +340,22 @@ This allows the quantized policy to focus on states where quantization has the m
   producing saliency maps that align closely with expert behavior.
 </p>
 
+<div style="display: flex; align-items: center; gap: 2em; max-width: 1000px; margin: 2em auto;">
+  <img src="assets/fig_action_dist.png" alt="Action Distribution Comparison"
+       style="width: 45%; max-width: 420px; border-radius: 8px;">
+
+  <div style="flex: 1; font-size: 0.95em; color: #444; line-height: 1.6;">
+    <strong>Action Distribution Comparison:</strong><br>
+    This figure compares the action distributions of FP, PTQ, QAT, QRD, and SQIL in a self-driving task.<br><br>
+    • <strong>PTQ</strong> deviates significantly from FP due to quantization noise.<br>
+    • <strong>QAT</strong> aligns peaks with expert actions but overly sharpens the distribution.<br>
+    • <strong>QRD</strong> maintains FP-like shape but may underrepresent expert intent.<br>
+    • <strong>SQIL</strong> combines both benefits—preserving the FP structure while prioritizing expert-like decisions.
+  </div>
+</div>
+
+
+    
 <p>
 <h2>Experiments</h2>
 <img src="assets/fig_3.PNG" alt="Teaser Image", style="width: 80%; display: block; margin: 1em auto;">
