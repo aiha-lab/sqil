@@ -307,6 +307,8 @@ This enables a quantized policy \( \pi^Q_\theta \) that is efficient, but incur 
 </p>
 
 <p style="font-size: 1em; color: #555; margin-top: 0.5em;">
+<div class="card">
+  <h3 style="margin-top: 0;">Saliency-based Importance Score (SIS)</h3>
 To detect such <em>mission-critical states</em>, SQIL computes a <strong>Saliency-based Importance Score (SIS)</strong>:
 </p>
 
@@ -320,7 +322,11 @@ $$
 where \( \phi(s_t, k) \) introduces a local state perturbation at location \(k\). High SIS indicates strong sensitivity in decision-making.
 <img src="assets/fig_6.PNG" alt="Teaser Image", style="width: 90%; display: block; margin: 1em auto;">
 </p>
+</div>
 
+<div class="card">
+<h3 style="margin-top: 0;">Saliency-aware Quantized Imitaion Learning (SQIL)</h3>
+    
 <p style="font-size: 1em; color: #555; margin-top: 0.5em;">
 SQIL integrates this signal into a saliency-weighted imitation objective:
 </p>
@@ -334,6 +340,7 @@ $$
 <p style="font-size: 1em; color: #555; margin-top: 0.5em;">
 This allows the quantized policy to focus on states where quantization has the most critical effect, achieving full-precision-like performance even at 4-bit.
 </p>
+</div>   
     
 <img src="assets/fig_2.png" alt="Teaser Image", style="width: 65%; display: block; margin: 1em auto;">
 <img src="assets/fig_2_2.PNG" alt="Teaser Image", style="width: 55%; display: block; margin: 1em auto;">
