@@ -539,9 +539,9 @@ In robot manipulation, INT4 provides <strong>2.5× speedup</strong> and <strong>
 <script>
   let realIndex = 0;
   function slideReal(dir) {
-    const total = 2;
+    const total = 4;
     realIndex = (realIndex + dir + total) % total;
-    document.getElementById('real-slider').style.transform = `translateX(-${50 * realIndex}%)`;
+    document.getElementById('real-slider').style.transform = `translateX(-${25 * realIndex}%)`;
 
     const slides = document.querySelectorAll('#real-slider .slide');
     const currentSlide = slides[realIndex];
