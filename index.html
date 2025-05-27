@@ -325,21 +325,32 @@ where \( \phi(s_t, k) \) introduces a local state perturbation at location \(k\)
 </div>
 
 <div class="card">
-<h3 style="margin-top: 0;">Saliency-aware Quantized Imitaion Learning (SQIL)</h3>
-    
+<h3 style="margin-top: 0;">Saliency-aware Quantized Imitation Learning (SQIL)</h3>
+
 <p style="font-size: 1em; color: #555; margin-top: 0.5em;">
-SQIL integrates this signal into a saliency-weighted imitation objective:
+SQIL enhances imitation learning under quantization by combining two complementary components: quantization-aware training (QAT) and quantization-robust action distillation (QRD). QAT aligns the quantized policy with expert actions, while QRD further reduces quantization errors by matching the output distribution of the quantized policy to that of the full-precision (FP) policy.
+</p>
+
+<p style="font-size: 1em; color: #555; margin-top: 0.5em;">
+To identify which states deserve more focus during distillation, we use the saliency-based importance score (SIS). QRD applies a selective weighting coefficient \(\alpha_t\), assigning larger weights to <em>mission-critical states</em>—those with high SIS values.
 </p>
 
 <div style="text-align: center; margin: 1.2em 0;">
 $$
-\mathcal{L}^{\text{SQIL}}(\theta) = \underbrace{- \log \pi^Q_\theta(a_t|s_t)}_{\text{QAT}} + \underbrace{\alpha_t \cdot D(\pi^Q_\theta || \pi^{FP})}_{\text{QRD weighted by SIS}}
+\mathcal{L}^{\text{SQIL}}(\theta) = 
+\underbrace{- \log \pi^Q_\theta(a_t|s_t)}_{\text{QAT}} + 
+\underbrace{\alpha_t \cdot D(\pi^Q_\theta(\cdot|s_t) || \pi^{FP}(\cdot|s_t))}_{\text{QRD weighted by SIS}}
 $$
 </div>
 
 <p style="font-size: 1em; color: #555; margin-top: 0.5em;">
-This allows the quantized policy to focus on states where quantization has the most critical effect, achieving full-precision-like performance even at 4-bit.
+Here, \( D(\cdot || \cdot) \) is a discrepancy metric such as the L2 norm, and \(\alpha_t = \beta\) for the top 20% highest SIS states (\( \text{SIS}(s_t) > T \)), otherwise 1. This weighting emphasizes learning from states most affected by quantization. As shown in experiments, this mechanism significantly reduces action discrepancies and improves control fidelity under 4-bit quantization.
 </p>
+
+<p style="font-size: 1em; color: #555; margin-top: 0.5em;">
+Since SIS and the FP policy are precomputed, SQIL does not require changes to the training pipeline and can reuse existing datasets and hyperparameters. This makes SQIL a plug-and-play solution for robust, low-bit deployment across robotics, autonomous driving, and simulation.
+</p>
+</div>
 </div>   
     
 <img src="assets/fig_2.png" alt="Teaser Image", style="width: 65%; display: block; margin: 1em auto;">
