@@ -333,6 +333,12 @@ This allows the quantized policy to focus on states where quantization has the m
   improving performance under quantization (+1.1% over KF).
 </p>
 <img src="assets/fig_attmap.png" alt="Teaser Image", style="width: 85%; display: block; margin: 1em auto;">    
+<p style="text-align: center; font-size: 1em; color: #555; margin-top: 0.5em;">
+  <strong>Saliency visualization</strong> shows how quantization distorts the policy's attention.  
+  While the FP policy attends to meaningful regions (e.g., robot arm, bowl, plate),  
+  PTQ often misfocuses on irrelevant areas. SQIL successfully restores the focus pattern of the FP policy,  
+  producing saliency maps that align closely with expert behavior.
+</p>
 
 <p>
 <h2>Experiments</h2>
