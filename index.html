@@ -347,9 +347,6 @@ $$
 Here, \( D(\cdot || \cdot) \) is a discrepancy metric such as the L2 norm, and \(\alpha_t = \beta\) for the top 20% highest SIS states (\( \text{SIS}(s_t) > T \)), otherwise 1. This weighting emphasizes learning from states most affected by quantization. As shown in experiments, this mechanism significantly reduces action discrepancies and improves control fidelity under 4-bit quantization.
 </p>
 
-<p style="font-size: 1em; color: #555; margin-top: 0.5em;">
-Since SIS and the FP policy are precomputed, SQIL does not require changes to the training pipeline and can reuse existing datasets and hyperparameters. This makes SQIL a plug-and-play solution for robust, low-bit deployment across robotics, autonomous driving, and simulation.
-</p>
 </div>
 </div>   
     
