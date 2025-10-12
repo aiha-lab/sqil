@@ -2,7 +2,7 @@
 # SQIL: Saliency-Aware Quantized Imitation Learning for Efficient Robotic Control
 
 [![Conference](https://img.shields.io/badge/ICCV-2025-blue.svg?style=for-the-badge)]()
-[![Paper](https://img.shields.io/badge/arXiv-2503.01234-df2a2a.svg?style=for-the-badge)](https://arxiv.org/abs/2505.15304)
+[![Paper](https://img.shields.io/badge/arXiv-2505.15304-df2a2a.svg?style=for-the-badge)](https://arxiv.org/abs/2505.15304)
 [![Project Page](https://img.shields.io/badge/🌐-Project%20Page-009688?style=for-the-badge)](https://aiha-lab.github.io/sqil/)
 
 
