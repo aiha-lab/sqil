@@ -3,17 +3,11 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "openvla"
-authors = [
-    {name = "Moo Jin Kim", email="moojink@stanford.edu"},
-    {name = "Karl Pertsch", email="pertsch@berkeley.edu"},
-    {name = "Siddharth Karamcheti", email="skaramcheti@cs.stanford.edu"},
-]
-description = "OpenVLA: Vision-Language-Action Models for Robotics"
-version = "0.0.3"
+name = "sqil"
+version = "0.0.0"
 readme = "README.md"
 requires-python = ">=3.8"
-keywords = ["vision-language-actions models", "multimodal pretraining", "robot learning"]
+keywords = ["vision-language-actions models", "imitation learning", "quantization"]
 license = {file = "LICENSE"}
 classifiers = [
     "Development Status :: 3 - Alpha",
