@@ -147,7 +147,7 @@ python experiments/robot/libero/run_libero_eval.py \
 # Launch LIBERO-10 (LIBERO-Long) evals
 python experiments/robot/libero/run_libero_eval.py \
   --model_family openvla \
-  --pretrained_checkpoint <PATH/TO/YOUR_SQIL_CHECKPOINT_10>\
+  --pretrained_checkpoint <PATH/TO/YOUR_SQIL_CHECKPOINT_LONG>\
   --task_suite_name libero_10 \
   --center_crop True
 ```
