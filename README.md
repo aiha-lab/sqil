@@ -59,7 +59,7 @@ cd sqil
 pip install -r experiments/robot/libero/libero_requirements.txt
 ```
 To download the modified versions of the LIBERO datasets that we used in our fine-tuning experiments, run the command below.
-This will download the LIBERO-Spatial, LIBERO-Object, LIBERO-Goal, and LIBERO-10 (Long) datasets in RLDS data format (~10 GB total).
+This will download the LIBERO-Spatial, LIBERO-Object, LIBERO-Goal, and LIBERO-10 (Long) datasets in RLDS data format (~10 GB total) released by the [OpenVLA](https://github.com/openvla/openvla) project.
 
 
 ```bash
