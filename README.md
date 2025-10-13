@@ -12,6 +12,7 @@
 
 This repository contains the **implementation of
 *Saliency-Aware Quantized Imitation Learning for Efficient Robotic Control (SQIL)***, accepted to **ICCV 2025**.
+It provides fine-tuning pipelines for adapting OpenVLA models on the LIBERO benchmark datasets using the SQIL framework.
 
 <p align="center">
   <img src="https://aiha-lab.github.io/sqil/assets/fig_1.PNG" alt="SQIL Teaser" width="85%">
