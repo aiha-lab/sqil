@@ -10,7 +10,7 @@
 
 ## Introduction
 
-This repository contains the **official implementation of
+This repository contains the **implementation of
 *Saliency-Aware Quantized Imitation Learning for Efficient Robotic Control (SQIL)***, accepted to **ICCV 2025**.
 
 <p align="center">
