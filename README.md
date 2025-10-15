@@ -72,7 +72,7 @@ git clone git@hf.co:datasets/openvla/modified_libero_rlds
 
 ## (Prerequisite) Prepare a Low-Precision Policy (AWQ / QuaRot)
 
-Before running **Precompute Saliency Importance Scores**, you need a **low-precision (quantized) policy**.  
+Before running **SQIL**, you need a **low-precision (quantized) policy**.  
 Please use an existing repo such as:
 
 - **AWQ**: https://github.com/mit-han-lab/llm-awq  
