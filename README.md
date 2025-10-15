@@ -70,7 +70,7 @@ git clone git@hf.co:datasets/openvla/modified_libero_rlds
 
 ## Usage
 
-## (Prerequisite) Prepare a Low-Precision Policy (AWQ / QuaRot)
+### (Prerequisite) Prepare a Low-Precision Policy (AWQ / QuaRot)
 
 Before running **SQIL**, you need a **low-precision (quantized) policy**.  
 Please use an existing repo such as:
